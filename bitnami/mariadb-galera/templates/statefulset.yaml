@@ -121,6 +121,9 @@ spec:
             {{- $releaseName := include "common.names.namespace" . }}
             {{- $clusterDomain := .Values.clusterDomain }}
             {{- $initialCluster := list }}
+            {{- if .Values.bootstrap.shouldBootstrapFromNodeIP }}
+            {{- $initialCluster = append $initialCluster .Values.bootstrap.bootstrapFromIp }}
+            {{- end }}
             {{- range $e, $i := until (int .Values.replicaCount) }}
             {{- $initialCluster = append $initialCluster (printf "%s-%d.%s-headless.%s.svc.%s" $fullName $i $fullName $releaseName $clusterDomain) }}
             {{- end }}
